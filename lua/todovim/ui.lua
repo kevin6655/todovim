@@ -60,13 +60,13 @@ local function delete_to_todo()
   -- #をつけることで配列の最大値を取得できる Uboundみたいな感じ
   -- カーソル位置の設定
   -- 最大値+2で考慮する ヘッダー行と区切り線を考慮する
-  if new_pos > #state.todos + 2 then
+  if new_cuurent_pos > #state.todos + 2 then
     -- 最大値より大きいため必然的に最終行になる
-    new_pos = #state.todos + 2
+    new_cuurent_pos = #state.todos + 2
   else
     if is_valid_window(state.win) and #state.todos > 0 then
       -- 新しいカーソル位置で画面を再描画する
-      vim.api.nvim_win_set_cursor(state.win,{new_pos, 0})
+      vim.api.nvim_win_set_cursor(state.win,{new_cuurent_pos, 0})
     end
   end
 end 
