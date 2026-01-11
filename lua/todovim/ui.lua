@@ -46,8 +46,26 @@ local function jump_to_todo()
   -- ウィンドウを閉じる
   M.close()
 
-  -- ファイルを開く
-  vim.cmd("edit " .. vim.fn.fnameescape(todo.file))
+  -- ファイルに対応するバッファを探す
+  local target_buf = vim.fn.bufnr(todo.file)
+
+  if target_buf ~= -1 then
+    -- バッファが既に存在する場合は切り替える
+    vim.api.nvim_set_current_buf(target_buf)
+  else
+    -- バッファが存在しない場合
+    -- 現在のバッファに未保存の変更があるかチェック
+    local current_buf = vim.api.nvim_get_current_buf()
+    local modified = vim.api.nvim_buf_get_option(current_buf, "modified")
+
+    if modified then
+      -- 未保存の変更がある場合は新しいウィンドウで開く
+      vim.cmd("split " .. vim.fn.fnameescape(todo.file))
+    else
+      -- 未保存の変更がない場合は現在のウィンドウで開く
+      vim.cmd("edit " .. vim.fn.fnameescape(todo.file))
+    end
+  end
 
   -- 行にジャンプ
   vim.api.nvim_win_set_cursor(0, { todo.line, todo.col - 1 })
