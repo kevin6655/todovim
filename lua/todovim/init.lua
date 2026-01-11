@@ -58,9 +58,9 @@ function M.extract_todos_from_file(filepath)
     line_num = line_num + 1
 
     for _, pattern in ipairs(M.config.patterns) do
-      -- コメント内の TODO パターンを検索
+      -- コメント内の TODO パターンを検索（コロン必須）
       -- line:find() の返り値: start_pos, end_pos, capture1, capture2, capture3, ...
-      local start_pos, end_pos, prefix, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:?%s*(.*)")
+      local start_pos, end_pos, prefix, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:%s*(.*)")
 
       if todo_type then
         table.insert(todos, {
@@ -145,7 +145,8 @@ function M.extract_todos_from_current_buffer()
   for line_num, line in ipairs(lines) do
     for _, pattern in ipairs(M.config.patterns) do
       -- line:find() の返り値: start_pos, end_pos, capture1, capture2, capture3, ...
-      local start_pos, end_pos, prefix, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:?%s*(.*)")
+      -- コロン必須
+      local start_pos, end_pos, prefix, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:%s*(.*)")
 
       if todo_type then
         table.insert(todos, {
