@@ -49,6 +49,51 @@ Neovim用のTODOリスト表示プラグイン。プロジェクト内のコメ�
 }
 ```
 
+### lazy.nvim（pluginsディレクトリを使用）
+
+`~/.config/nvim/lua/plugins/todovim.lua` を作成：
+
+```lua
+return {
+  "kevin6655/todovim",
+  cmd = { "TodoShow", "TodoShowBuffer", "TodoToggle", "TodoClose" },
+  keys = {
+    { "<leader>td", "<cmd>TodoToggle<cr>", desc = "Toggle TODO list" },
+    { "<leader>tb", "<cmd>TodoShowBuffer<cr>", desc = "Show buffer TODOs" },
+  },
+  opts = {
+    -- デフォルト設定（オプション）
+    patterns = {
+      "TODO",
+      "FIXME",
+      "HACK",
+      "NOTE",
+      "WARNING",
+      "XXX",
+      "BUG",
+    },
+    exclude_dirs = {
+      ".git",
+      "node_modules",
+      ".cache",
+      "dist",
+      "build",
+    },
+    window = {
+      width = 80,
+      height = 20,
+      border = "rounded",
+    },
+  },
+}
+```
+
+この方法を使用する場合、`~/.config/nvim/init.lua` に以下の設定が必要です：
+
+```lua
+require("lazy").setup("plugins")
+```
+
 ### Packer
 
 ```lua
