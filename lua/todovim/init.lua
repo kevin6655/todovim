@@ -59,13 +59,14 @@ function M.extract_todos_from_file(filepath)
 
     for _, pattern in ipairs(M.config.patterns) do
       -- コメント内の TODO パターンを検索
-      local col, _, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:?%s*(.*)")
+      -- line:find() の返り値: start_pos, end_pos, capture1, capture2, capture3, ...
+      local start_pos, end_pos, prefix, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:?%s*(.*)")
 
       if todo_type then
         table.insert(todos, {
           file = filepath,
           line = line_num,
-          col = col or 1,
+          col = start_pos or 1,
           type = todo_type,
           text = text or "",
           full_line = line:gsub("^%s+", ""), -- 先頭の空白を削除
@@ -143,13 +144,14 @@ function M.extract_todos_from_current_buffer()
 
   for line_num, line in ipairs(lines) do
     for _, pattern in ipairs(M.config.patterns) do
-      local col, _, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:?%s*(.*)")
+      -- line:find() の返り値: start_pos, end_pos, capture1, capture2, capture3, ...
+      local start_pos, end_pos, prefix, todo_type, text = line:find("(.-)(" .. pattern .. ")%s*:?%s*(.*)")
 
       if todo_type then
         table.insert(todos, {
           file = filepath,
           line = line_num,
-          col = col or 1,
+          col = start_pos or 1,
           type = todo_type,
           text = text or "",
           full_line = line:gsub("^%s+", ""),
