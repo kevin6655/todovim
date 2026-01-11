@@ -74,6 +74,41 @@ local function jump_to_todo()
   vim.cmd("normal! zz")
 end
 
+-- TODO をリストから削除（ファイルは変更しない）
+local function delete_todo()
+  local line = vim.api.nvim_win_get_cursor(state.win)[1]
+
+  -- ヘッダー行をスキップ
+  if line <= 2 then
+    return
+  end
+
+  local todo_index = line - 2
+
+  if not state.todos[todo_index] then
+    return
+  end
+
+  -- 現在のカーソル位置を保存
+  local cursor_pos = line
+
+  -- テーブルから削除
+  table.remove(state.todos, todo_index)
+
+  -- リストを再描画
+  M.show_todos(state.todos)
+
+  -- カーソル位置を調整
+  local new_pos = cursor_pos
+  if new_pos > #state.todos + 2 then
+    new_pos = math.max(3, #state.todos + 2)
+  end
+
+  if is_valid_window(state.win) and #state.todos > 0 then
+    vim.api.nvim_win_set_cursor(state.win, { new_pos, 0 })
+  end
+end
+
 -- TODO リストを表示するバッファを作成
 local function create_buffer(todos)
   local buf = vim.api.nvim_create_buf(false, true)
@@ -114,6 +149,7 @@ local function create_buffer(todos)
   vim.keymap.set("n", "<CR>", jump_to_todo, opts)
   vim.keymap.set("n", "q", M.close, opts)
   vim.keymap.set("n", "<ESC>", M.close, opts)
+  vim.keymap.set("n", "dd", delete_todo, opts)
 
   return buf
 end
