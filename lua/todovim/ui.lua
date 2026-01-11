@@ -68,6 +68,7 @@ local function delete_to_todo()
       -- 新しいカーソル位置で画面を再描画する
       vim.api.nvim_win_set_cursor(state.win,{new_pos, 0})
     end
+  end
 end 
 
 
