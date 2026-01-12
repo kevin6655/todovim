@@ -205,12 +205,8 @@ local function create_buffer(todos)
   -- キーマップの設定
   -- 特定のキーを押下時に対象のメソッドを呼び出す。
   -- nはノーマルモードのときに発動できる。
-<<<<<<< HEAD
   vim.keymap.set("n", "dd" , delete_to_todo, opts)
-=======
-  vim.keymap.set("n", "dd", delete_to_todo, opts)
 
->>>>>>> d7c250fb0495f726a7c19a5165c3f961aa4d771e
   return buf
 end
 
@@ -248,7 +244,7 @@ local function create_window(buf)
   return win
 end
 
--- TODO リストを表示
+-- TODO: リストを表示
 function M.show_todos(todos)
   -- 既存のウィンドウを閉じる
   if is_valid_window(state.win) then
