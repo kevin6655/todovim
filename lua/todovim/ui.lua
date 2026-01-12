@@ -205,12 +205,7 @@ local function create_buffer(todos)
   -- キーマップの設定
   -- 特定のキーを押下時に対象のメソッドを呼び出す。
   -- nはノーマルモードのときに発動できる。
-<<<<<<< HEAD
   vim.keymap.set("n", "dd" , delete_to_todo, opts)
-=======
-  vim.keymap.set("n", "dd", delete_to_todo, opts)
-
->>>>>>> d7c250fb0495f726a7c19a5165c3f961aa4d771e
   return buf
 end
 
