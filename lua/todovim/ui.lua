@@ -243,7 +243,7 @@ local function create_window(buf)
   return win
 end
 
--- TODO リストを表示
+-- TODO: リストを表示
 function M.show_todos(todos)
   -- 既存のウィンドウを閉じる
   if is_valid_window(state.win) then
