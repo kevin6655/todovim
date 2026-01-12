@@ -42,7 +42,7 @@ local function delete_to_todo()
   local todo_index = current_cursor - 2
   --nil ,falseしか真偽値がないためNotを使う
   --渡されたインデックスで情報が抽出できない場合は処理を抜ける
-  if Not state.todos[todo_index]  then
+  if not state.todos[todo_index]  then
     return
   end
 -- 現在のカーソル位置のインデックスを保持しておく
@@ -70,13 +70,6 @@ local function delete_to_todo()
     end
   end
 end 
-
-
-
-
-
-
-
 
   
   -- 対象のキーを押下時タスクを削除する
