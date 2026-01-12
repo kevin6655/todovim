@@ -71,11 +71,6 @@ local function delete_to_todo()
   end
 end 
 
-  
-  -- 対象のキーを押下時タスクを削除する
-
-end
-
 -- TODO の場所にジャンプ
 local function jump_to_todo()
   local line = vim.api.nvim_win_get_cursor(state.win)[1]
