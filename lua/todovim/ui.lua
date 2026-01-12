@@ -60,13 +60,13 @@ local function delete_to_todo()
   -- #をつけることで配列の最大値を取得できる Uboundみたいな感じ
   -- カーソル位置の設定
   -- 最大値+2で考慮する ヘッダー行と区切り線を考慮する
-  if new_pos > #state.todos + 2 then
+  if new_cuurent_pos > #state.todos + 2 then
     -- 最大値より大きいため必然的に最終行になる
-    new_pos = #state.todos + 2
+    new_cuurent_pos = #state.todos + 2
   else
     if is_valid_window(state.win) and #state.todos > 0 then
       -- 新しいカーソル位置で画面を再描画する
-      vim.api.nvim_win_set_cursor(state.win,{new_pos, 0})
+      vim.api.nvim_win_set_cursor(state.win,{new_cuurent_pos, 0})
     end
   end
 end 
@@ -130,6 +130,50 @@ local function jump_to_todo()
   vim.cmd("normal! zz")
 end
 
+-- TODO: カーソル位置の情報を削除する実装を追加する
+local function delete_to_todo()
+  -- 現在のカーソル位置を取得する
+  local current_cursor = vim.api.nvim_win_get_cursor(state.win)[1]
+  -- ヘッダー行を除いて参照できるようにする
+  -- 現在のカーソル位置が区切り線を含むヘッダー行以上だったら処理を抜ける
+  if current_cursor <= 2 then
+    return
+  end
+  -- 現在のカーソル位置に存在するTODOを取得する
+  -- stateの構造体に情報が格納できるので入れる
+  -- 現在のカーソル位置から-2することで参照している配列のインデックスを取得できる
+  local todo_index = current_cursor - 2
+  --nil ,falseしか真偽値がないためnotを使う
+  --渡されたインデックスで情報が抽出できない場合は処理を抜ける
+  if not state.todos[todo_index] then
+    return
+  end
+  -- 現在のカーソル位置のインデックスを保持しておく
+  -- 後の画面再読込時に使う
+  local current_cursor_pos = current_cursor
+
+  -- 画面内のテーブルから削除
+  table.remove(state.todos, todo_index)
+
+  -- 削除後のポジション再描画処理
+  M.show_todos(state.todos)
+
+  -- 削除後の行数を取得
+  local new_current_pos = math.max(3, current_cursor_pos)
+  -- #をつけることで配列の最大値を取得できる Uboundみたいな感じ
+  -- カーソル位置の設定
+  -- 最大値+2で考慮する ヘッダー行と区切り線を考慮する
+  if new_current_pos > #state.todos + 2 then
+    -- 最大値より大きいため必然的に最終行になる
+    new_current_pos = #state.todos + 2
+  end
+
+  if is_valid_window(state.win) and #state.todos > 0 then
+    -- 新しいカーソル位置で画面を再描画する
+    vim.api.nvim_win_set_cursor(state.win, { new_current_pos, 0 })
+  end
+end
+
 -- TODO リストを表示するバッファを作成
 local function create_buffer(todos)
   local buf = vim.api.nvim_create_buf(false, true)
@@ -173,7 +217,12 @@ local function create_buffer(todos)
   -- キーマップの設定
   -- 特定のキーを押下時に対象のメソッドを呼び出す。
   -- nはノーマルモードのときに発動できる。
+<<<<<<< HEAD
   vim.keymap.set("n", "dd" , delete_to_todo, opts)
+=======
+  vim.keymap.set("n", "dd", delete_to_todo, opts)
+
+>>>>>>> d7c250fb0495f726a7c19a5165c3f961aa4d771e
   return buf
 end
 
